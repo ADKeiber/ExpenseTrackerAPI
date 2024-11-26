@@ -31,7 +31,6 @@ public class UserController {
 		return new ResponseEntity<>(userService.readUser(userId), HttpStatus.OK);
 	}
 	
-	//TODO Break up update to be for specific user parts
 	@PostMapping("/updatePassword")
 	public ResponseEntity<Object> updateUserPassword(@RequestBody User user) {
 		System.out.println(user.toString());

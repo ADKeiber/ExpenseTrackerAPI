@@ -54,8 +54,6 @@ public class UserService implements IUserService {
 	@Override
 	public User updateUserPassword(User user) {
 		//Checks required fields
-//		if( user.getId() == null || user.getId().isBlank())
-//			throw new FieldBlankException(User.class, "id", String.class.toString());
 		if( user.getUsername() == null || user.getUsername().isBlank())
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if( user.getPassword() == null || user.getPassword().isBlank())
