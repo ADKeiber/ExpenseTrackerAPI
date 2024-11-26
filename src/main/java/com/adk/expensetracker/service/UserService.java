@@ -2,7 +2,6 @@ package com.adk.expensetracker.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class UserService implements IUserService {
 		if( user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
 		
-		User userWithUsername = userRepo.findByUsernameText(user.getUsername());
+		User userWithUsername = userRepo.findByUsername(user.getUsername());
 		if(userWithUsername != null)
 			throw new UsernameAlreadyExistsException(user.getUsername());
 		
@@ -53,21 +52,22 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User updateUser(User user) {
+	public User updateUserPassword(User user) {
 		//Checks required fields
-		if( user.getId() == null || user.getId().isBlank())
-			throw new FieldBlankException(User.class, "id", String.class.toString());
+//		if( user.getId() == null || user.getId().isBlank())
+//			throw new FieldBlankException(User.class, "id", String.class.toString());
 		if( user.getUsername() == null || user.getUsername().isBlank())
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if( user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
 		
-		Optional<User> foundUser = userRepo.findById(user.getId());
+		User foundUser = userRepo.findByUsername(user.getUsername());
 		
 		//Verifies user Exists
-		if(foundUser.isEmpty())
+		if(foundUser == null)
 			throw new EntityNotFoundException(User.class, "id", user.getId());
-		User savedUser = userRepo.save(user);
+		foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
+		User savedUser = userRepo.save(foundUser);
 		return savedUser;
 	}
 
