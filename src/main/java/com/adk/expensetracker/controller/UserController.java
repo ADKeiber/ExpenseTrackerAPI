@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adk.expensetracker.model.User;
 import com.adk.expensetracker.service.UserService;
 
-@RestController
+@RestController("/user")
 public class UserController {
 	
 	@Autowired
