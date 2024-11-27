@@ -1,6 +1,7 @@
 package com.adk.expensetracker.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adk.expensetracker.errorhandling.EntityNotFoundException;
+import com.adk.expensetracker.model.Category;
 import com.adk.expensetracker.model.Expense;
 import com.adk.expensetracker.model.User;
+import com.adk.expensetracker.repo.CategoryRepo;
 import com.adk.expensetracker.repo.ExpenseRepo;
-import com.adk.expensetracker.repo.UserRepo;
 
 @Service
 public class ExpenseService implements IExpenseService {
@@ -21,11 +23,21 @@ public class ExpenseService implements IExpenseService {
 	ExpenseRepo expenseRepo;
 	
 	@Autowired
-	UserRepo userRepo;
+	UserService userService;
+	
+	@Autowired
+	CategoryRepo categoryRepo;
 
 	@Override
-	public Expense createExpense(Expense expense) {
+	public Expense createExpense(String userId, Expense expense) {
+		User returnedUser = userService.readUser(userId);
+		expense.setUser(returnedUser);
 		expense.checkRequiredFields();
+		if(expense.getCategory() != null) {
+			Category category = checkAndAddCategory(expense.getCategory());
+			expense.setCategory(category);
+		}
+			
 		return expenseRepo.save(expense);
 	}
 
@@ -40,9 +52,7 @@ public class ExpenseService implements IExpenseService {
 	@Override
 	public List<Expense> readExpensesForUser(String userId) {
 		
-		Optional<User> returnedUser = userRepo.findById(userId);
-		if( returnedUser.isEmpty() )
-			throw new EntityNotFoundException(User.class, "id", userId);
+		User returnedUser = userService.readUser(userId);
 		
 		List<Expense> returnedExpenses = expenseRepo.findByUserId(userId);
 		if(returnedExpenses == null || returnedExpenses.size() == 0)
@@ -52,20 +62,12 @@ public class ExpenseService implements IExpenseService {
 	}
 
 	@Override //This can be updated to have the initial search for expenses taking in the dates instead of filtering
-	public List<Expense> readExpensesWithDateRange(LocalDate startDate, LocalDate endDate, String userId) {
+	public List<Expense> readExpensesWithDateRange(LocalDateTime startDate, LocalDateTime endDate, String userId) {
 		List<Expense> unfilteredExpenses = readExpensesForUser(userId);
 		List<Expense> filteredExpenses = unfilteredExpenses.stream().filter(expense -> 
-						(expense.getDate().isAfter(startDate) && expense.getDate().isBefore(endDate)) || 
-						expense.getDate().isEqual(startDate) || expense.getDate().isEqual(endDate)
+						expense.getDate().isAfter(startDate.withHour(0).withMinute(0).withSecond(0)) && expense.getDate().isBefore(endDate)
 						).collect(Collectors.toList());
 		return filteredExpenses;
-	}
-
-	@Override
-	public Expense deleteExpense(String expenseId) {
-		Expense returnedResposne = readExpense(expenseId);
-		expenseRepo.deleteById(expenseId);
-		return returnedResposne;
 	}
 
 	@Override
@@ -76,9 +78,40 @@ public class ExpenseService implements IExpenseService {
 		Expense foundExpense = readExpense(expenseId);
 		
 		expense.setId(foundExpense.getId());
+		if(expense.getCategory() != null) {
+			Category category = checkAndAddCategory(expense.getCategory());
+			expense.setCategory(category);
+		}
 		Expense savedExpense = expenseRepo.save(expense);
 		
 		return savedExpense;
 	}
+	
+	@Override
+	public Expense deleteExpense(String expenseId) {
+		Expense returnedResposne = readExpense(expenseId);
+		expenseRepo.deleteById(expenseId);
+		return returnedResposne;
+	}
 
+	@Override//This can be updated to have the initial search for expenses taking in the category and userId instead of filtering
+	public List<Expense> readExpenseForUserByCategory(String userId, Category category) {
+		User returnedUser = userService.readUser(userId);
+		
+		List<Expense> unfilteredExpenses = expenseRepo.findByUserId(userId);
+		List<Expense> filteredExpenses = unfilteredExpenses.stream().filter(expense -> expense.getCategory() == category).collect(Collectors.toList());
+	
+		return filteredExpenses;
+	}
+	
+	@Override
+	public Category checkAndAddCategory(Category category) {
+		
+		Optional<Category> foundCategory = categoryRepo.findByName(category.getName());
+		
+		if(foundCategory.isPresent())
+			return foundCategory.get();
+			
+		return categoryRepo.save(category);
+	}
 }

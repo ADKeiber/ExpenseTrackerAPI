@@ -1,6 +1,7 @@
 package com.adk.expensetracker.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -19,7 +20,7 @@ public class Expense {
 	private String shortDescription;
 	private String fullDescription;
 	private Double amount;
-	private LocalDate date;
+	private LocalDateTime date;
 	@DBRef
 	private Category category;
 	@DBRef

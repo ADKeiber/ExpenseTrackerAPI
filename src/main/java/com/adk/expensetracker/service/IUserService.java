@@ -8,4 +8,5 @@ public interface IUserService {
 	public User updateUserPassword(User user);
 	public User deleteUserById(String userId);
 	public User deleteUser(User user);
+	public Boolean validateUser(User user);
 }

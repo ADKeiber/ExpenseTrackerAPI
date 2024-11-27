@@ -19,7 +19,6 @@ public class UserService implements IUserService {
 	
 	private final UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder;
-	
 
 	@Override
 	public User createUser(User user) {
@@ -98,6 +97,24 @@ public class UserService implements IUserService {
 		userRepo.delete(user);
 		
 		return user;
+	}
+
+	@Override //This will be updated to return a JWT later also update to throw an exception rather than return false
+	public Boolean validateUser(User user) {
+		
+		if(user.getUsername() == null || user.getUsername().isBlank())
+			throw new FieldBlankException(User.class, "username", String.class.toString());
+		if(user.getPassword() == null || user.getPassword().isBlank())
+			throw new FieldBlankException(User.class, "password", String.class.toString());
+		User returnedUser = userRepo.findByUsername(user.getUsername());
+		
+		//Verifies user exists then verifies the password (after being decoded) is the same as passed in password
+		if(returnedUser == null){
+			return false;
+		} else if(!passwordEncoder.matches(user.getPassword(), returnedUser.getPassword())) {
+			return false;
+		}
+		return true;
 	}
 
 }

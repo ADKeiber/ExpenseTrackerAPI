@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adk.expensetracker.model.User;
 import com.adk.expensetracker.service.UserService;
 
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
@@ -29,6 +31,11 @@ public class UserController {
 	public ResponseEntity<Object> getUser(@PathVariable String userId) {
 		System.out.println(userId);
 		return new ResponseEntity<>(userService.readUser(userId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/validate")
+	public ResponseEntity<Object> validateuser(@RequestBody User user) {
+		return new ResponseEntity<>(userService.validateUser(user), HttpStatus.OK);
 	}
 	
 	@PostMapping("/updatePassword")
