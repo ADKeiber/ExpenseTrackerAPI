@@ -1,7 +1,19 @@
 package com.adk.expensetracker.service;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.adk.expensetracker.model.Role;
+import com.adk.expensetracker.repo.RoleRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,28 +27,38 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service @RequiredArgsConstructor @Slf4j
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 	
 	private final UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder;
+	private final RoleRepo roleRepo;
+
+	public Role createRole(Role r){
+		Optional<Role> returnedRole = roleRepo.findByValue(r.getValue());
+        return returnedRole.orElseGet(() -> roleRepo.save(r));
+    }
 
 	@Override
-	public User createUser(User user) {
+	public User createUser(User user, List<String> roles) {
 		
 		if( user.getUsername() == null || user.getUsername().isBlank())
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if( user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
-		
-		User userWithUsername = userRepo.findByUsername(user.getUsername());
-		if(userWithUsername != null)
+
+		if(userRepo.existsByUsername(user.getUsername()))
 			throw new UsernameAlreadyExistsException(user.getUsername());
-		
+		List<Role> userRoles = new LinkedList<>();
+
+		roles.forEach( role -> {
+			userRoles.add(roleRepo.findByValue(role).get());
+		});
+
+		user.setRoles(userRoles);
+
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
-		User returnedUser = userRepo.save(user);
-		
-		return returnedUser;
+
+        return userRepo.save(user);
 	}
 
 	@Override
@@ -58,7 +80,7 @@ public class UserService implements IUserService {
 		if( user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
 		
-		User foundUser = userRepo.findByUsername(user.getUsername());
+		User foundUser = userRepo.findByUsername(user.getUsername()).get();
 		
 		//Verifies user Exists
 		if(foundUser == null)
@@ -106,7 +128,7 @@ public class UserService implements IUserService {
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if(user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
-		User returnedUser = userRepo.findByUsername(user.getUsername());
+		User returnedUser = userRepo.findByUsername(user.getUsername()).get();
 		
 		//Verifies user exists then verifies the password (after being decoded) is the same as passed in password
 		if(returnedUser == null){
@@ -117,4 +139,13 @@ public class UserService implements IUserService {
 		return true;
 	}
 
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+	}
+
+	private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getValue())).collect(Collectors.toList());
+	}
 }
