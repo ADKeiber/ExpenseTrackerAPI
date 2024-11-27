@@ -12,9 +12,4 @@ public class ExpenseTrackerApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ExpenseTrackerApiApplication.class, args);
 	}
-	
-	@Bean
-	PasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
 }

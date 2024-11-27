@@ -96,6 +96,7 @@ public class ExpenseService implements IExpenseService {
 
 	@Override//This can be updated to have the initial search for expenses taking in the category and userId instead of filtering
 	public List<Expense> readExpenseForUserByCategory(String userId, Category category) {
+		@SuppressWarnings("unused")
 		User returnedUser = userService.readUser(userId);
 		
 		List<Expense> unfilteredExpenses = expenseRepo.findByUserId(userId);
