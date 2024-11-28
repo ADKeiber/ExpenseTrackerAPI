@@ -1,6 +1,5 @@
 package com.adk.expensetracker.security;
 
-import com.adk.expensetracker.model.User;
 import com.adk.expensetracker.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

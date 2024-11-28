@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.adk.expensetracker.model.Category;
 import com.adk.expensetracker.model.Expense;
 
 public interface ExpenseRepo extends MongoRepository<Expense, String> {	

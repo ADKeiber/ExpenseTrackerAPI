@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 import com.adk.expensetracker.dto.AuthResponseDTO;
 import com.adk.expensetracker.dto.LoginDTO;
 import com.adk.expensetracker.dto.RegisterDTO;
-import com.adk.expensetracker.dto.UserDTO;
 import com.adk.expensetracker.model.Role;
 import com.adk.expensetracker.repo.RoleRepo;
 import com.adk.expensetracker.security.JWTGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -71,14 +69,8 @@ public class UserService implements IUserService, UserDetailsService {
 	@Override
 	public User readUser(String userId) {
 		Optional<User> user = userRepo.findById(userId);
-		
-		//Verifies user Exists
 		if(user.isEmpty())
 			throw new EntityNotFoundException(User.class, "ID", userId);
-//		User foundUser = user.get();
-//		List<String> roleName = new LinkedList<>();
-//		foundUser.getRoles().forEach(role -> roleName.add(role.getValue()));
-//		return new UserDTO(foundUser.getId(), foundUser.getUsername(), roleName);
 		return user.get();
 	}
 

@@ -3,8 +3,6 @@ package com.adk.expensetracker.service;
 import com.adk.expensetracker.dto.AuthResponseDTO;
 import com.adk.expensetracker.dto.LoginDTO;
 import com.adk.expensetracker.dto.RegisterDTO;
-import com.adk.expensetracker.dto.UserDTO;
-import com.adk.expensetracker.model.Role;
 import com.adk.expensetracker.model.User;
 
 import java.util.List;
