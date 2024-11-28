@@ -4,8 +4,7 @@ import com.adk.expensetracker.model.User;
 import lombok.Data;
 
 @Data
-public class RegisterDTO {
-    private String email;
+public class LoginDTO {
     private String username;
     private String password;
 
@@ -13,7 +12,6 @@ public class RegisterDTO {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        user.setEmail(email);
         return user;
     }
 }

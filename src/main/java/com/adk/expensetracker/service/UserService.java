@@ -6,11 +6,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.adk.expensetracker.dto.AuthResponseDTO;
+import com.adk.expensetracker.dto.LoginDTO;
+import com.adk.expensetracker.dto.RegisterDTO;
+import com.adk.expensetracker.dto.UserDTO;
 import com.adk.expensetracker.model.Role;
 import com.adk.expensetracker.repo.RoleRepo;
+import com.adk.expensetracker.security.JWTGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,15 +41,13 @@ public class UserService implements IUserService, UserDetailsService {
 	private final UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder;
 	private final RoleRepo roleRepo;
-
-	public Role createRole(Role r){
-		Optional<Role> returnedRole = roleRepo.findByValue(r.getValue());
-        return returnedRole.orElseGet(() -> roleRepo.save(r));
-    }
+	private final AuthenticationManager authenticationManager;
+	private final JWTGenerator jwtGenerator;
 
 	@Override
-	public User createUser(User user, List<String> roles) {
-		
+	public User createUser(RegisterDTO user, List<String> roles) {
+		if( user.getEmail() == null || user.getEmail().isBlank())
+			throw new FieldBlankException(User.class, "email", String.class.toString());
 		if( user.getUsername() == null || user.getUsername().isBlank())
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if( user.getPassword() == null || user.getPassword().isBlank())
@@ -53,12 +60,12 @@ public class UserService implements IUserService, UserDetailsService {
 		roles.forEach( role -> {
 			userRoles.add(roleRepo.findByValue(role).get());
 		});
+		User mappedRegisterDTO = user.mapToUser();
+		mappedRegisterDTO.setRoles(userRoles);
 
-		user.setRoles(userRoles);
+		mappedRegisterDTO.setPassword(passwordEncoder.encode(user.getPassword()));
 
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        return userRepo.save(user);
+        return userRepo.save(mappedRegisterDTO);
 	}
 
 	@Override
@@ -68,26 +75,34 @@ public class UserService implements IUserService, UserDetailsService {
 		//Verifies user Exists
 		if(user.isEmpty())
 			throw new EntityNotFoundException(User.class, "ID", userId);
-		
+//		User foundUser = user.get();
+//		List<String> roleName = new LinkedList<>();
+//		foundUser.getRoles().forEach(role -> roleName.add(role.getValue()));
+//		return new UserDTO(foundUser.getId(), foundUser.getUsername(), roleName);
 		return user.get();
 	}
 
+
 	@Override
-	public User updateUserPassword(User user) {
+	public User updateUser(String userId, RegisterDTO user) {
 		//Checks required fields
+		if( user.getEmail() == null || user.getEmail().isBlank())
+			throw new FieldBlankException(User.class, "email", String.class.toString());
 		if( user.getUsername() == null || user.getUsername().isBlank())
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if( user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
 		
-		User foundUser = userRepo.findByUsername(user.getUsername()).get();
+		Optional<User> foundUser = userRepo.findById(userId);
 		
 		//Verifies user Exists
-		if(foundUser == null)
-			throw new EntityNotFoundException(User.class, "id", user.getId());
-		foundUser.setPassword(passwordEncoder.encode(user.getPassword()));
-		User savedUser = userRepo.save(foundUser);
-		return savedUser;
+		if(foundUser.isEmpty())
+			throw new EntityNotFoundException(User.class, "id", userId);
+		User retrievedUser = foundUser.get();
+		retrievedUser.setUsername(user.getUsername());
+		retrievedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+		retrievedUser.setEmail(user.getEmail());
+        return userRepo.save(retrievedUser);
 	}
 
 	@Override
@@ -105,38 +120,17 @@ public class UserService implements IUserService, UserDetailsService {
 	}
 
 	@Override
-	public User deleteUser(User user) {
-		//Verifies an id was passed in
-		if( user.getId() == null || user.getId().isBlank())
-			throw new FieldBlankException(User.class, "id", String.class.toString());
-		
-		Optional<User> foundUser = userRepo.findById(user.getId());
-		
-		//Verifies user Exists
-		if(foundUser.isEmpty())
-			throw new EntityNotFoundException(User.class, "id", user.getId());
-		
-		userRepo.delete(user);
-		
-		return user;
-	}
+	public AuthResponseDTO validateUser(LoginDTO user) {
 
-	@Override //This will be updated to return a JWT later also update to throw an exception rather than return false
-	public Boolean validateUser(User user) {
-		
 		if(user.getUsername() == null || user.getUsername().isBlank())
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if(user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
-		User returnedUser = userRepo.findByUsername(user.getUsername()).get();
-		
-		//Verifies user exists then verifies the password (after being decoded) is the same as passed in password
-		if(returnedUser == null){
-			return false;
-		} else if(!passwordEncoder.matches(user.getPassword(), returnedUser.getPassword())) {
-			return false;
-		}
-		return true;
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+				user.getUsername(), user.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String token = jwtGenerator.generateToken(authentication);
+		return new AuthResponseDTO(token);
 	}
 
 	@Override

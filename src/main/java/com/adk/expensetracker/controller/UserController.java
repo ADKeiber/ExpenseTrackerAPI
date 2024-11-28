@@ -1,10 +1,14 @@
 package com.adk.expensetracker.controller;
 
 import com.adk.expensetracker.dto.AuthResponseDTO;
+import com.adk.expensetracker.dto.LoginDTO;
+import com.adk.expensetracker.dto.RegisterDTO;
+import com.adk.expensetracker.dto.UserDTO;
 import com.adk.expensetracker.model.Role;
 import com.adk.expensetracker.repo.RoleRepo;
 import com.adk.expensetracker.repo.UserRepo;
 import com.adk.expensetracker.security.JWTGenerator;
+import com.adk.expensetracker.util.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,8 @@ import com.adk.expensetracker.model.User;
 import com.adk.expensetracker.service.UserService;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -32,50 +38,29 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-	@Autowired
-    private AuthenticationManager authenticationManager;
-	@Autowired
-	private RoleRepo roleRepo;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	@Autowired
-	private JWTGenerator jwtGenerator;
 
 	@PostMapping("/register")
-	public ResponseEntity<Object> createUser(@RequestBody User user) {
-		System.out.println(user.toString());
-		return new ResponseEntity<>(userService.createUser(user, Arrays.asList(new String[]{"USER"})), HttpStatus.OK);
+	public ResponseEntity<Object> createUser(@RequestBody RegisterDTO user) {
+		return new ResponseEntity<>(DTOMapper.mapToUserDTO(userService.createUser(user, Arrays.asList(new String[]{"USER"}))), HttpStatus.OK);
 	}
 
 	@GetMapping("/get/{userId}")
 	public ResponseEntity<Object> getUser(@PathVariable String userId) {
-		System.out.println(userId);
-		return new ResponseEntity<>(userService.readUser(userId), HttpStatus.OK);
+		return new ResponseEntity<>(DTOMapper.mapToUserDTO(userService.readUser(userId)), HttpStatus.OK);
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<Object> validateUser(@RequestBody User user) {
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-				user.getUsername(), user.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String token = jwtGenerator.generateToken(authentication);
-		return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+	public ResponseEntity<Object> validateUser(@RequestBody LoginDTO user) {
+		return new ResponseEntity<>(userService.validateUser(user), HttpStatus.OK);
 	}
 	
-	@PostMapping("/updatePassword")
-	public ResponseEntity<Object> updateUserPassword(@RequestBody User user) {
-		System.out.println(user.toString());
-		return new ResponseEntity<>(userService.updateUserPassword(user), HttpStatus.OK);
+	@PostMapping("/update/{userId}")
+	public ResponseEntity<Object> updateUserPassword(@PathVariable String userId, @RequestBody RegisterDTO user) {
+		return new ResponseEntity<>(DTOMapper.mapToUserDTO(userService.updateUser(userId, user)), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{userId}")
 	public ResponseEntity<Object> deleteUserById(@PathVariable String userId) {
-		return new ResponseEntity<>(userService.deleteUserById(userId), HttpStatus.OK);
+		return new ResponseEntity<>(DTOMapper.mapToUserDTO(userService.deleteUserById(userId)), HttpStatus.OK);
 	}
-	
-	@DeleteMapping("/delete")
-	public ResponseEntity<Object> deleteUserById(@RequestBody User user) {
-		return new ResponseEntity<>(userService.deleteUser(user), HttpStatus.OK);
-	}
-	
 }
