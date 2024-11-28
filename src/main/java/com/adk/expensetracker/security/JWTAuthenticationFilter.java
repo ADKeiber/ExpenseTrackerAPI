@@ -1,6 +1,7 @@
 package com.adk.expensetracker.security;
 
-import com.adk.expensetracker.service.UserService;
+import com.adk.expensetracker.service.CustomUserDetailsService;
+import com.mongodb.lang.NonNullApi;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private JWTGenerator jwtGenerator;
 
     @Autowired
-    private UserService userService;
+    private CustomUserDetailsService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

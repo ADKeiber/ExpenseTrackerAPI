@@ -13,12 +13,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JWTGenerator {
+
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    public final long JWT_EXPIRATION = 3600000;
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
+        Date expireDate = new Date(currentDate.getTime() + JWT_EXPIRATION);
 
         String token = Jwts.builder()
                 .setSubject(username)

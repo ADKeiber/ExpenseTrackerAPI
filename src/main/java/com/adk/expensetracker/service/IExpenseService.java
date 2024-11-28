@@ -7,13 +7,13 @@ import com.adk.expensetracker.model.Category;
 import com.adk.expensetracker.model.Expense;
 
 public interface IExpenseService {
-	public Expense createExpense(String userId, Expense expense);
-	public Expense readExpense(String expenseId);
-	public List<Expense> readExpensesForUser(String userId);
-	public List<Expense> readExpenseForUserByCategory(String userId, Category category); //TODO implement
-	public List<Expense> readExpensesWithDateRange(LocalDateTime startDate, LocalDateTime endDate, String userId);
-	public Expense updateExpense(String expenseId, Expense expense);
-	public Expense deleteExpense(String expenseId);
-	public Category checkAndAddCategory(Category category);
+	Expense createExpense(String userId, Expense expense);
+	Expense readExpense(String expenseId);
+	List<Expense> readExpensesForUser(String userId);
+	List<Expense> readExpenseForUserByCategory(String userId, String categoryName);
+	List<Expense> readExpensesWithDateRange(LocalDateTime startDate, LocalDateTime endDate, String userId);
+	Expense updateExpense(String expenseId, Expense expense);
+	Expense deleteExpense(String expenseId);
+	Category checkAndAddCategory(Category category);
 }
  

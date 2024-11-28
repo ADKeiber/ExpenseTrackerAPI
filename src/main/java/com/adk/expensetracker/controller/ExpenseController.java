@@ -40,10 +40,10 @@ public class ExpenseController {
 		return new ResponseEntity<>(DTOMapper.mapToExpenseDTO(expenseService.readExpensesForUser(userId)), HttpStatus.OK);
 	}
 	
-	@GetMapping("/get/{userId}")
-	public ResponseEntity<Object> getExpenseForUserByCategory(@PathVariable String userId) {
+	@GetMapping("/getByCategory/{userId}/{categoryName}")
+	public ResponseEntity<Object> getExpenseForUserByCategory(@PathVariable String userId, @PathVariable String categoryName) {
 		System.out.println(userId);
-		return new ResponseEntity<>(DTOMapper.mapToExpenseDTO(expenseService.readExpensesForUser(userId)), HttpStatus.OK);
+		return new ResponseEntity<>(DTOMapper.mapToExpenseDTO(expenseService.readExpenseForUserByCategory(userId, categoryName)), HttpStatus.OK);
 	}
 	
 	@GetMapping("/getPastWeek/{userId}")

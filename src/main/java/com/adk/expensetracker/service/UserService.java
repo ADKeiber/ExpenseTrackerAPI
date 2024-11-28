@@ -1,10 +1,8 @@
 package com.adk.expensetracker.service;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.adk.expensetracker.dto.AuthResponseDTO;
 import com.adk.expensetracker.dto.LoginDTO;
@@ -15,12 +13,7 @@ import com.adk.expensetracker.security.JWTGenerator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service @RequiredArgsConstructor @Slf4j
-public class UserService implements IUserService, UserDetailsService {
+public class UserService implements IUserService {
 	
 	private final UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder;
@@ -55,9 +48,7 @@ public class UserService implements IUserService, UserDetailsService {
 			throw new UsernameAlreadyExistsException(user.getUsername());
 		List<Role> userRoles = new LinkedList<>();
 
-		roles.forEach( role -> {
-			userRoles.add(roleRepo.findByValue(role).get());
-		});
+		roles.forEach( role -> userRoles.add(roleRepo.findByValue(role).get()));
 		User mappedRegisterDTO = user.mapToUser();
 		mappedRegisterDTO.setRoles(userRoles);
 
@@ -123,15 +114,5 @@ public class UserService implements IUserService, UserDetailsService {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String token = jwtGenerator.generateToken(authentication);
 		return new AuthResponseDTO(token);
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
-	}
-
-	private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getValue())).collect(Collectors.toList());
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.adk.expensetracker.errorhandling.FieldBlankException;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 @Data
 @Document
@@ -21,7 +22,7 @@ public class Expense {
 	private String fullDescription;
 	private Double amount;
 	private LocalDateTime date;
-	@DBRef
+	@DocumentReference(lookup = "{ 'name' : ?#{#target} }")
 	private Category category;
 	@DBRef
 	private User user;
