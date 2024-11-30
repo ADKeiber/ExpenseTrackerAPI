@@ -47,6 +47,7 @@ public class SecurityConfig {
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests((auths) -> auths
 				.requestMatchers("/user/register", "/user/login", "/api-docs/**", "/swagger-ui/**").permitAll()
+				.requestMatchers("/user/makeAdmin/**", "expense/createCategory/**").hasAnyAuthority("ADMIN")
 				.anyRequest().authenticated())
 		.httpBasic(withDefaults());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
