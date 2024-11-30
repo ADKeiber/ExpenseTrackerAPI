@@ -140,4 +140,15 @@ public class UserService implements IUserService {
 		returnedUser.setRoles(roles);
 		return userRepo.save(returnedUser);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getUserIdByUsername(String username) {
+		Optional<User> user = userRepo.findByUsername(username);
+		if(user.isEmpty())
+			throw new EntityNotFoundException(User.class, "username", username);
+		return user.get().getId();
+	}
 }

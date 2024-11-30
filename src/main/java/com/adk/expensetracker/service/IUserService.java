@@ -55,4 +55,11 @@ public interface IUserService {
 	 * @return {@link User} the user that had the admin role added to them
 	 */
 	User makeUserAdmin(String userId);
+
+	/**
+	 * Retrives a user's id by its username
+	 * @param username {@link String} the username attached to the user
+	 * @return {@link String} the id of the user
+	 */
+	String getUserIdByUsername(String username);
 }

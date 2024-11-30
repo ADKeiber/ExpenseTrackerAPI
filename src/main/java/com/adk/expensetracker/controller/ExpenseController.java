@@ -3,8 +3,16 @@ package com.adk.expensetracker.controller;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.adk.expensetracker.dto.ExpenseDTO;
+import com.adk.expensetracker.dto.UserDTO;
+import com.adk.expensetracker.errorhandling.ApiError;
 import com.adk.expensetracker.model.Category;
 import com.adk.expensetracker.util.DTOMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +43,32 @@ public class ExpenseController {
 	 * @param expense {@link Expense} the expense to add
 	 * @return {@link ResponseEntity} containing an ExpenseDTO if no api errors are thrown
 	 */
+	@Operation(summary = "Create a new Expense", description = "Creates a new expense by taking in a JSON Expense Object in the request body and a user ID in the request parameters. If required fields are blank/null inside of the request body an API Error will be returned. " +
+			"Required fields: shortDescription, fullDescription, amount, date", responses = {
+			@ApiResponse(description = "Success", responseCode = "200", content = @Content(schema = @Schema(implementation = ExpenseDTO.class), examples = {
+					@ExampleObject(value = "{\n" +
+							"    \"id\": \"674b3a2f7f637a4fbadaadfa\",\n" +
+							"    \"username\": \"test\",\n" +
+							"    \"roles\": [\n" +
+							"        \"USER\"\n" +
+							"    ]\n" +
+							"}") })),
+			@ApiResponse(description = "Bad Request/ Missing Required Field", responseCode = "400", content = @Content(schema = @Schema(implementation = ApiError.class), examples = {
+					@ExampleObject(value = "{\r\n" + "    \"apierror\": {\r\n"
+							+ "        \"status\": \"BAD_REQUEST\",\r\n"
+							+ "        \"timestamp\": \"11-11-2024 02:25:54\",\r\n"
+							+ "        \"message\": \"One of the Required fields was missing for the passed in entity!\",\r\n"
+							+ "        \"debugMessage\": \"User was missing value of field 'username' which is of class java.lang.String\"\r\n"
+							+ "    }\r\n" + "}") })),
+			@ApiResponse(description = "Bad Request/ User with username already exists", responseCode = "409", content = @Content(schema = @Schema(implementation = ApiError.class), examples = {
+					@ExampleObject(value = "{\n" +
+							"    \"apierror\": {\n" +
+							"        \"status\": \"CONFLICT\",\n" +
+							"        \"timestamp\": \"30-11-2024 11:12:11\",\n" +
+							"        \"message\": \"The username 'admin' exists already!\",\n" +
+							"        \"debugMessage\": null\n" +
+							"    }\n" +
+							"}") })) })
 	@PostMapping("/create/{userId}")
 	public ResponseEntity<Object> createExpense(@PathVariable String userId, @RequestBody Expense expense) {
 		return new ResponseEntity<>(DTOMapper.mapToExpenseDTO(expenseService.createExpense(userId, expense)), HttpStatus.OK);
