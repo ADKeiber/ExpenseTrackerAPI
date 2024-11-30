@@ -3,6 +3,7 @@ package com.adk.expensetracker.controller;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.adk.expensetracker.model.Category;
 import com.adk.expensetracker.util.DTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,5 +79,12 @@ public class ExpenseController {
 	@DeleteMapping("/delete/{expenseId}")
 	public ResponseEntity<Object> deleteExpense(@PathVariable String expenseId) {
 		return new ResponseEntity<>(DTOMapper.mapToExpenseDTO(expenseService.deleteExpense(expenseId)), HttpStatus.OK);
+	}
+
+	@PostMapping("/createCategory/{categoryName}")
+	public ResponseEntity<Object> createExpenseCategory(@PathVariable String categoryName) {
+		Category newCategory = new Category();
+		newCategory.setName(categoryName);
+		return new ResponseEntity<>(expenseService.checkAndAddCategory(newCategory).getName(), HttpStatus.OK);
 	}
 }

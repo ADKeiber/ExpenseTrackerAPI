@@ -2,6 +2,7 @@ package com.adk.expensetracker.util;
 
 import com.adk.expensetracker.dto.ExpenseDTO;
 import com.adk.expensetracker.dto.UserDTO;
+import com.adk.expensetracker.model.Category;
 import com.adk.expensetracker.model.Expense;
 import com.adk.expensetracker.model.User;
 

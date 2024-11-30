@@ -52,4 +52,9 @@ public class UserController {
 	public ResponseEntity<Object> deleteUserById(@PathVariable String userId) {
 		return new ResponseEntity<>(DTOMapper.mapToUserDTO(userService.deleteUserById(userId)), HttpStatus.OK);
 	}
+
+	@PostMapping("/makeAdmin/{userId}")
+	public ResponseEntity<Object> makeUserAdmin(@PathVariable String userId) {
+		return new ResponseEntity<>(DTOMapper.mapToUserDTO(userService.makeUserAdmin(userId)), HttpStatus.OK);
+	}
 }

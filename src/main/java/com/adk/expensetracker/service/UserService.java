@@ -125,4 +125,19 @@ public class UserService implements IUserService {
 		String token = jwtGenerator.generateToken(authentication);
 		return new AuthResponseDTO(token);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public User makeUserAdmin(String userId) {
+		User returnedUser = readUser(userId);
+		Optional<Role> returnedRole = roleRepo.findByValue("ADMIN");
+		if(returnedRole.isEmpty())
+			throw new EntityNotFoundException(Role.class, "value", "ADMIN");
+		List<Role> roles = returnedUser.getRoles();
+		roles.add(returnedRole.get());
+		returnedUser.setRoles(roles);
+		return userRepo.save(returnedUser);
+	}
 }
