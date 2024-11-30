@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO that contains the information of an Expense
+ */
 @Data
 @AllArgsConstructor
 public class ExpenseDTO {

@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * DTO that contains the information of a user
+ */
 @Data
 @AllArgsConstructor
 public class UserDTO {

@@ -11,12 +11,20 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+/**
+ * Tool used to generate Jwt tokens
+ */
 @Component
 public class JWTGenerator {
 
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     public final long JWT_EXPIRATION = 3600000;
 
+    /**
+     * Generates a JWT token
+     * @param authentication {@link Authentication} the authentication for the attempted login
+     * @return {@link String} the jwt token
+     */
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date currentDate = new Date();
@@ -32,6 +40,12 @@ public class JWTGenerator {
         System.out.println(token);
         return token;
     }
+
+    /**
+     * Retrieves a username from a jwt token string
+     * @param token {@link String} the jwt token
+     * @return {@link String} the username inside the JWT
+     */
     public String getUsernameFromJWT(String token){
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -41,6 +55,11 @@ public class JWTGenerator {
         return claims.getSubject();
     }
 
+    /**
+     * Validates a token
+     * @param token {@link String} the jwt token
+     * @return {@code true} if the jwt token is valid, {@code false} otherwise
+     */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()

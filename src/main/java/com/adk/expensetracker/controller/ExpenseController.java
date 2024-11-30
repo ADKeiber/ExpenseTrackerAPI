@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adk.expensetracker.model.Expense;
 import com.adk.expensetracker.service.ExpenseService;
 
+/**
+ * API Endpoints that are used to create, read, update, and delete expenses
+ */
 @RestController
 @RequestMapping("/expense")
 public class ExpenseController {

@@ -18,6 +18,9 @@ import com.adk.expensetracker.service.UserService;
 
 import java.util.Arrays;
 
+/**
+ * API Endpoints that are used to create, read, update, and delete users
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {

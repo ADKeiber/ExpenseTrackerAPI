@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
+/**
+ * Database object containing information about a user
+ */
 @Data
 @Document // this is like a table name
 public class User {

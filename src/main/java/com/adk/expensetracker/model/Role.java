@@ -5,6 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
+/**
+ * Database object containing information about a User's role
+ */
 @Data
 @Document
 public class Role {

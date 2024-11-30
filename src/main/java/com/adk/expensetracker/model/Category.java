@@ -5,6 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
+/**
+ * Database object containing information about an Expense's Category
+ */
 @Data
 @Document
 public class Category {

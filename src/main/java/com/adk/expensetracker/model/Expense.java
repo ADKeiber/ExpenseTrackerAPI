@@ -6,12 +6,13 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.adk.expensetracker.errorhandling.FieldBlankException;
-
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import com.adk.expensetracker.errorhandling.FieldBlankException;
 
+/**
+ * Database object containing information about an Expense
+ */
 @Data
 @Document
 public class Expense {

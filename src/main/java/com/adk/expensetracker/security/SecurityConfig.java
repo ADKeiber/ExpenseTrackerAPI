@@ -16,6 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Security configuration for the application
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -27,7 +30,13 @@ public class SecurityConfig {
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
+	/**
+	 * Sets Security configurations
+	 * @param http {@link HttpSecurity} http security configuration
+	 * @return {@link SecurityFilterChain} containing user filter chain if http successfully build
+	 * @throws Exception if unable to build http
+	 */
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
