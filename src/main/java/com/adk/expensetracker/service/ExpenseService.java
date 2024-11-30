@@ -14,6 +14,9 @@ import com.adk.expensetracker.model.User;
 import com.adk.expensetracker.repo.CategoryRepo;
 import com.adk.expensetracker.repo.ExpenseRepo;
 
+/**
+ * Implementation of {@link IExpenseService}
+ */
 @Service
 public class ExpenseService implements IExpenseService {
 	
@@ -26,6 +29,9 @@ public class ExpenseService implements IExpenseService {
 	@Autowired
 	CategoryRepo categoryRepo;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Expense createExpense(String userId, Expense expense) {
 		User returnedUser = userService.readUser(userId);
@@ -38,6 +44,9 @@ public class ExpenseService implements IExpenseService {
 		return expenseRepo.save(expense);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Expense readExpense(String expenseId) {
 		Optional<Expense> returnedResponse = expenseRepo.findById(expenseId);
@@ -45,7 +54,10 @@ public class ExpenseService implements IExpenseService {
 			throw new EntityNotFoundException(Expense.class, "id", expenseId);
 		return returnedResponse.get();
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Expense> readExpensesForUser(String userId) {
 		userService.readUser(userId);
@@ -55,13 +67,18 @@ public class ExpenseService implements IExpenseService {
 		return returnedExpenses;
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Expense> readExpensesWithDateRange(LocalDateTime startDate, LocalDateTime endDate, String userId) {
 		userService.readUser(userId);
         return expenseRepo.findByUserIdAndBetweenTwoDates(userId, startDate, endDate);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Expense updateExpense(String expenseId, Expense expense) {
 		expense.checkRequiredFields();
@@ -73,7 +90,10 @@ public class ExpenseService implements IExpenseService {
 		}
         return expenseRepo.save(expense);
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Expense deleteExpense(String expenseId) {
 		Expense returnedResponse = readExpense(expenseId);
@@ -81,12 +101,18 @@ public class ExpenseService implements IExpenseService {
 		return returnedResponse;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Expense> readExpenseForUserByCategory(String userId, String categoryName) {
 		userService.readUser(userId);
 		return expenseRepo.findByUserIdAndCategoryName(userId, categoryName);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Category checkAndAddCategory(Category category) {
 		Optional<Category> foundCategory = categoryRepo.findByName(category.getName());

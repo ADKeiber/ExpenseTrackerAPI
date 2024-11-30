@@ -26,6 +26,9 @@ import com.adk.expensetracker.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Implementation of {@link IUserService}
+ */
 @Service @RequiredArgsConstructor @Slf4j
 public class UserService implements IUserService {
 	
@@ -35,6 +38,9 @@ public class UserService implements IUserService {
 	private final AuthenticationManager authenticationManager;
 	private final JWTGenerator jwtGenerator;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public User createUser(RegisterDTO user, List<String> roles) {
 		if( user.getEmail() == null || user.getEmail().isBlank())
@@ -57,6 +63,9 @@ public class UserService implements IUserService {
         return userRepo.save(mappedRegisterDTO);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public User readUser(String userId) {
 		Optional<User> user = userRepo.findById(userId);
@@ -65,7 +74,9 @@ public class UserService implements IUserService {
 		return user.get();
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public User updateUser(String userId, RegisterDTO user) {
 		//Checks required fields
@@ -75,9 +86,7 @@ public class UserService implements IUserService {
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if( user.getPassword() == null || user.getPassword().isBlank())
 			throw new FieldBlankException(User.class, "password", String.class.toString());
-		
 		Optional<User> foundUser = userRepo.findById(userId);
-		
 		//Verifies user Exists
 		if(foundUser.isEmpty())
 			throw new EntityNotFoundException(User.class, "id", userId);
@@ -88,23 +97,24 @@ public class UserService implements IUserService {
         return userRepo.save(retrievedUser);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public User deleteUserById(String userId) {
-		
 		Optional<User> foundUser = userRepo.findById(userId);
-		
 		//Verifies user Exists
 		if(foundUser.isEmpty())
 			throw new EntityNotFoundException(User.class, "id", userId);
-		
 		userRepo.deleteById(userId);
-		
 		return foundUser.get();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AuthResponseDTO validateUser(LoginDTO user) {
-
 		if(user.getUsername() == null || user.getUsername().isBlank())
 			throw new FieldBlankException(User.class, "username", String.class.toString());
 		if(user.getPassword() == null || user.getPassword().isBlank())
