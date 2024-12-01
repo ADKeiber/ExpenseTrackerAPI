@@ -4,6 +4,7 @@ API that is used to create and manage expenses using Spring Boot Framework
 <b> Table of Contents </b> <br>
 - [Description](#description)
   - [Endpoint Operations](#endpoint-operations)
+  - [OpenAPI Docs](#openapi-docs)
   - [Expense Filtering Options](#expense-filtering-options)
   - [Application Technical Features](#application-technical-features)
 - [How to Run](#how-to-run)
@@ -29,6 +30,19 @@ On top of that, authenticated users are also limited to non-admin endpoints unle
 * Update existing expenses
 * Filter through expenses
 * Create new Expense Categories
+  
+### OpenAPI Docs
+This application uses SpringDocs with is an implementation of OpenAPI and allows for the easy creation of endpoint documentation and classes.<br>
+
+After the application the docs can be accessed here <br>
+```
+http://localhost:8080/swagger-ui/index.html#/
+```
+and the JSON form can be found here <br>
+```
+http://localhost:8080/api-docs
+```
+[Here](#screenshots) is a screenshot of what the docs look like
 
 ### Expense Filtering Options
 - Transaction Date  
@@ -64,10 +78,39 @@ My local environment versions:
 Certain ports must be open or already running the service
 - localhost:8080 for API  
 - localhost:27017 for MongoDB
-
+After MongoDB is up and running and all other software is installed you need to
+1. Run [this](https://github.com/ADKeiber/ExpenseTrackerAPI/blob/main/AdditionalFiles/data-insert.js) Script in MongoDB shell
+2. Download this project
+3. Navigate to project download location and run command
+  ```
+  mvn spring-boot:run
+  ```
+At this point you should be able to interact with the application via postman.
+<br>
+Postman Scripts can be found [here](https://github.com/ADKeiber/ExpenseTrackerAPI/tree/main/AdditionalFiles) <br>
+<br>
+<b>NOTE: </b> In order to run this collection a user must first get a JWT token via the 'Validate User' test and copy that into the Parent Folder as the Bearer Token.
+<br>
+![image](https://github.com/user-attachments/assets/56bc556d-45b0-49b0-9f50-c3d70e208102)
+<br>
+Admin User:
+```json
+  {
+    "username": "admin",
+    "password": "password"
+  }
+```
+After that token is entered all Postman Scripts can be ran!
 
 ## Screenshots
+OpenApi Docs <br><br>
+<img src="https://github.com/user-attachments/assets/f17c4864-981c-4ef3-a262-050ab49df39f" width="750" />
 
+Postman User Controller Test Run <br><br>
+<img src="https://github.com/user-attachments/assets/3a6f4659-2558-4cd2-9fc1-7a03ba339142" width="750" />
+
+Postman Expense Controller Test Run <br> <br>
+<img src="https://github.com/user-attachments/assets/d8121bc0-2856-4913-96a4-e6a032b42f27" width="750" />
 
 
 
