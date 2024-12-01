@@ -54,7 +54,12 @@ public class UserService implements IUserService {
 			throw new UsernameAlreadyExistsException(user.getUsername());
 		List<Role> userRoles = new LinkedList<>();
 
-		roles.forEach( role -> userRoles.add(roleRepo.findByValue(role).get()));
+		roles.forEach( (role) -> {
+			Optional<Role> foundRole = roleRepo.findByValue(role);
+			if(foundRole.isEmpty())
+				throw new EntityNotFoundException(Role.class, "value", role);
+			userRoles.add(foundRole.get());
+		});
 		User mappedRegisterDTO = user.mapToUser();
 		mappedRegisterDTO.setRoles(userRoles);
 

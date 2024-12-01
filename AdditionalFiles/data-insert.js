@@ -23,7 +23,7 @@ db.role.insertMany( [
     },
     {
         _id: ObjectId('67476778a773f4db732c497f'),
-        name: 'USER',
+        value: 'USER',
         _class: 'com.adk.expensetracker.model.Role'
     }
 ] );
@@ -35,16 +35,16 @@ db.user.insertMany( [
         email: 'user@gmail.com',
         username: 'user',
         password: '$2a$10$NKJaGNdELo9VAo7jEOvNue3prdHatjfQ3PjW9Wxl/mUSQhxj51oEy',
-        roles: [DBRef('role', '67476778a773f4db732c497f')],
-        username: 'com.adk.expensetracker.model.User'
+        roles: [DBRef('role', new ObjectId('67476778a773f4db732c497f'))],
+        _class: 'com.adk.expensetracker.model.User'
     },
     {
             _id: ObjectId('67482a4bceea026ca6ef5f0d'),
             email: 'admin@gmail.com',
             username: 'admin',
             password: '$2a$10$O73/9itVWO.T1SISPGW98.HI6BufCuUL7.BVjn2MRuAc5bW1byz4O',
-            roles: [DBRef('role', '67476778a773f4db732c497f'), DBRef('role', '6747673da773f4db732c497e')],
-            username: 'com.adk.expensetracker.model.User'
+            roles: [DBRef('role', new ObjectId('67476778a773f4db732c497f')), DBRef('role', new ObjectId('6747673da773f4db732c497e'))],
+            _class: 'com.adk.expensetracker.model.User'
     }
 ] );
 
@@ -55,9 +55,9 @@ db.expense.insertMany( [
         shortDescription: 'Bank Transfer1',
         fullDescription: 'Bank Transfer to account ending in 1111',
         amount: 10.5,
-        date: Date('2024-09-11T02:56:43.703+00:00'),
-        category: DBRef('category', '674ab549c50dd521b3e43d78'),
-        user : DBRef('user', '6748299eceea026ca6ef5f0c'),
-        username: 'com.adk.expensetracker.model.User'
+        date: '2024-09-11T02:56:43.703+00:00',
+        category: DBRef('category', new ObjectId('674ab549c50dd521b3e43d78')),
+        user : DBRef('user', new ObjectId('6748299eceea026ca6ef5f0c')),
+        _class: 'com.adk.expensetracker.model.User'
     }
 ] );

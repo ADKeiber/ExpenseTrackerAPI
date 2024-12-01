@@ -1,0 +1,842 @@
+{
+	"info": {
+		"_postman_id": "c3939255-71d3-481f-9963-e6c0bc5dd2eb",
+		"name": "Expense Tracker API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16694008"
+	},
+	"item": [
+		{
+			"name": "User Controller",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"adkeiber@gmail.com\",\r\n    \"username\": \"test\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"adkeiber@gmail.com\",\r\n    \"username\": \"user1\",\r\n    \"password\": \"password12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/update/6748299eceea026ca6ef5f0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"update",
+								"6748299eceea026ca6ef5f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Admin func) Make User Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"value\": \"USER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/makeAdmin/6748299eceea026ca6ef5f0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"makeAdmin",
+								"6748299eceea026ca6ef5f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/get/6748299eceea026ca6ef5f0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"get",
+								"6748299eceea026ca6ef5f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User ID by username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/getByUsername/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"getByUsername",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/delete/6748299eceea026ca6ef5f0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"delete",
+								"6748299eceea026ca6ef5f0c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Expense Controller",
+			"item": [
+				{
+					"name": "Create Expense",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"Bank Transfer2\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50,\r\n    \"date\": \"2024-11-10T22:56:43.703514\",\r\n    \"category\": {\r\n        \"name\": \"Home\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/create/67482a4bceea026ca6ef5f0d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"create",
+								"67482a4bceea026ca6ef5f0d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Expense Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"Bank Transfer\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/getByExpenseId/67482a4bceea026ca6ef5f0e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"getByExpenseId",
+								"67482a4bceea026ca6ef5f0e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By User Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"Bank Transfer\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/getByUserId/67482a4bceea026ca6ef5f0d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"getByUserId",
+								"67482a4bceea026ca6ef5f0d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By UserID and Category name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/expense/getByCategory/6748299eceea026ca6ef5f0c/Home",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"getByCategory",
+								"6748299eceea026ca6ef5f0c",
+								"Home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Past Week",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"Bank Transfer\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/getPastWeek/6748299eceea026ca6ef5f0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"getPastWeek",
+								"6748299eceea026ca6ef5f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Past Month",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"Bank Transfer\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/getPastMonth/6748299eceea026ca6ef5f0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"getPastMonth",
+								"6748299eceea026ca6ef5f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Past Three months",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"Bank Transfer\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/getPastThreeMonths/6748299eceea026ca6ef5f0c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"getPastThreeMonths",
+								"6748299eceea026ca6ef5f0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Custom Range",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"Bank Transfer\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/get/6748299eceea026ca6ef5f0c/2024-09-09T22:56:43.703/2024-09-10T22:56:43.704",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"get",
+								"6748299eceea026ca6ef5f0c",
+								"2024-09-09T22:56:43.703",
+								"2024-09-10T22:56:43.704"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update by expense id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"BankTransferUpdated\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50,\r\n    \"date\": \"2024-09-10T22:56:43.703514\",\r\n    \"user\": {\r\n        \"id\": \"67482a4bceea026ca6ef5f0d\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/update/67482a4bceea026ca6ef5f0e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"update",
+								"67482a4bceea026ca6ef5f0e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Admin func) Create new category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/expense/createCategory/Home",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"createCategory",
+								"Home"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete expense by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Validate that the response code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"shortDescription\": \"BankTransferUpdated\",\r\n    \"fullDescription\": \"Bank Transfer to account ending in 1111\",\r\n    \"amount\": 10.50,\r\n    \"date\": \"2024-09-10T22:56:43.703514\",\r\n    \"user\": {\r\n        \"id\": \"67456091f5f7ca5c0e67209f\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/expense/delete/67482a4bceea026ca6ef5f0e",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"expense",
+								"delete",
+								"67482a4bceea026ca6ef5f0e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczMzAyNTEyMywiZXhwIjoxNzMzMDI4NzIzfQ.jUhsGDCo0k3kcBAV2am9BWwZtMw27gNbmVVyNj8kIqmdEWkxn-H5YRGiM1Aak9E9mS91cHwV9AyNnlIwqGpO3Q",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
