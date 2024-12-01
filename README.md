@@ -16,6 +16,7 @@ This application is protected by Spring security and requires a User to get a va
 On top of that, authenticated users are also limited to non-admin endpoints unless their account contains the "ADMIN" role. <br>
 <br>
 <b>NOTE:</b> This application is part of a learning experience and is the third project in my backend learning journey. The path of my journey closely follows this roadmap... https://roadmap.sh/backend/project-ideas <br>
+**https://roadmap.sh/projects/expense-tracker**
 <br>
 ![image](https://github.com/user-attachments/assets/9cd8232d-2d93-4e25-ae06-4789607842f5)
 <br>
