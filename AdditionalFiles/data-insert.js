@@ -48,7 +48,7 @@ db.user.insertMany( [
     }
 ] );
 
-// Inserts needed expenses (Admin and Generic User)
+// Inserts needed expense
 db.expense.insertMany( [
     {
         _id: ObjectId('67482a4bceea026ca6ef5f0e'),
